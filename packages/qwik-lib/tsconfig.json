@@ -4,9 +4,12 @@
     "target": "ES2017",
     "moduleResolution": "Bundler",
     "module": "ES2022",
-    "lib": ["es2020", "DOM"],
+    "lib": [
+      "es2020",
+      "DOM"
+    ],
     "jsx": "react-jsx",
-    "jsxImportSource": "@builder.io/qwik",
+    "jsxImportSource": "@qwik.dev/core",
     "strict": true,
     "declaration": true,
     "declarationDir": "lib-types",
@@ -16,8 +19,12 @@
     "incremental": true,
     "isolatedModules": true,
     "noEmit": true,
-    "types": ["vite/client"]
+    "types": [
+      "vite/client"
+    ]
   },
-  "include": ["src", "vite.config.mts"],
-  "files": ["./.eslintrc.cjs"]
+  "include": [
+    "src",
+    "vite.config.mts"
+  ]
 }

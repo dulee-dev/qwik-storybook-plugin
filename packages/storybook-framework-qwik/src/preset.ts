@@ -1,5 +1,6 @@
 import { mergeConfig, Plugin } from "vite";
-import { QWIK_LOADER } from "@builder.io/qwik/loader";
+import { QWIK_LOADER } from "@qwik.dev/core/loader";
+import { qwikStorybookHmr } from "./qwik-hmr.js";
 import { qwikDocgen } from "./docs/qwik-docgen.js";
 import { StorybookConfig } from "./types.js";
 import { createRequire } from "module";
@@ -14,12 +15,8 @@ export const viteFinal: StorybookConfig["viteFinal"] = async (
   defaultConfig,
 ) => {
   const config = mergeConfig(defaultConfig, {
-    build: {
-      target: "es2020",
-      rollupOptions: {
-        external: ["@qwik-city-plan"],
-      },
-    },
+    base: defaultConfig.base === "./" ? "/" : defaultConfig.base,
+    build: { target: "es2020" },
   });
 
   if (
@@ -29,21 +26,29 @@ export const viteFinal: StorybookConfig["viteFinal"] = async (
   )
     config.plugins.push(qwikDocgen());
 
-  // Qwik-city plugin may be used in apps, but it has mdx stuff that conflicts with Storybook mdx
-  // we'll try to only remove the transform code (where the mdx stuff is), and keep everything else.
-  config.plugins = config.plugins.map((plugin: Plugin) => {
-    // the plugin may be standalone (Qwik <1.2), or in an array (Qwik >=1.2)
-    if (Array.isArray(plugin)) {
-      return plugin.map((subPlugin: Plugin) => {
-        return subPlugin.name === "vite-plugin-qwik-city"
-          ? { ...subPlugin, transform: () => null as any }
-          : subPlugin;
-      });
-    }
-    return plugin.name === "vite-plugin-qwik-city"
-      ? { ...plugin, transform: () => null as any }
-      : plugin;
+  // Router middleware owns application URLs and must not intercept Storybook.
+  // Keep the Qwik optimizer, which supplies the native v2 HMR bridge module.
+  const storybookPlugins = (plugins: any[]): any[] =>
+    plugins.flatMap((plugin) => {
+      if (Array.isArray(plugin)) return storybookPlugins(plugin);
+      return plugin?.name?.startsWith("vite-plugin-qwik-router") ||
+        plugin?.name === "vite-plugin-qwik-city"
+        ? []
+        : [plugin];
+    });
+  config.plugins = storybookPlugins(config.plugins);
+  config.plugins.push({
+    name: "storybook:qwik-router-mock-config",
+    resolveId(id: string) {
+      if (id === "@qwik-router-config") return "\0storybook:qwik-router-config";
+    },
+    load(id: string) {
+      if (id === "\0storybook:qwik-router-config") {
+        return "export const routes = []; export const serverPlugins = []; export const menus = []; export const basePathname = '/'; export const trailingSlash = true; export const cacheModules = false; export const serviceWorkerUrl = '';";
+      }
+    },
   });
+  config.plugins.push(qwikStorybookHmr());
 
   return config;
 };

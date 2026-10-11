@@ -1,4 +1,4 @@
-import { Component } from "@builder.io/qwik";
+import { Component } from "@qwik.dev/core";
 import { StorybookConfigVite } from "@storybook/builder-vite";
 import { WebRenderer } from "storybook/internal/types";
 export type {

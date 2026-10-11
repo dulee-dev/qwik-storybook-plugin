@@ -58,8 +58,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/literalpie/storybook-framework-qwik.git",
-    "directory": "app/qwik"
+    "url": "git+https://github.com/dulee-dev/qwik-storybook-plugin.git",
+    "directory": "packages/storybook-framework-qwik"
   },
   "license": "MIT",
   "files": [
@@ -82,22 +82,23 @@
     "release": "pnpm build && pnpm auto shipit"
   },
   "dependencies": {
-    "@storybook/builder-vite": "^10.3.3",
+    "@storybook/builder-vite": "^10.6.1",
     "magic-string": "^0.30.21",
-    "react-docgen-typescript": "^2.2.2"
+    "react-docgen-typescript": "^2.2.2",
+    "typescript": "6.0.3"
   },
   "peerDependencies": {
-    "@builder.io/qwik": ">=1.0.0"
+    "@qwik.dev/core": "2.0.0-rc.2"
   },
   "optionalDependencies": {
-    "@builder.io/qwik-city": "^1.19.2"
+    "@qwik.dev/router": "2.0.0-rc.2"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
     "auto": "11.3.6",
-    "storybook": "10.3.3",
-    "typescript": "~6.0.2",
-    "vite": "^7.0.0"
+    "storybook": "^10.6.1",
+    "typescript": "6.0.3",
+    "vite": "^8.3.4"
   },
   "engines": {
     "node": ">=22.0.0"

@@ -1,4 +1,12 @@
-import { inlinedQrl, render as renderQwik } from "@builder.io/qwik";
+import { jsx } from "@qwik.dev/core/jsx-runtime";
+import {
+  Fragment,
+  createSignal,
+  inlinedQrl,
+  render as renderQwik,
+  type JSXOutput,
+  type Signal,
+} from "@qwik.dev/core";
 import {
   ArgsEnhancer,
   ArgsStoryFn,
@@ -22,24 +30,51 @@ export const render: ArgsStoryFn<QwikRenderer<unknown>> = (args, context) => {
   return component;
 };
 
+interface CanvasRoot {
+  storyId: string;
+  output: Signal<JSXOutput>;
+  cleanup: () => void;
+}
+const roots = new WeakMap<HTMLElement, CanvasRoot>();
+
 export async function renderToCanvas<T>(
-  { storyFn, showMain }: RenderContext<QwikRenderer<T>>,
+  { storyFn, showMain, forceRemount, id }: RenderContext<QwikRenderer<T>>,
   canvasElement: QwikRenderer<T>["canvasElement"],
 ) {
-  const container = document.createElement("div");
-  canvasElement.childNodes.forEach((c) => c.remove());
-  canvasElement.append(container);
-  await renderQwik(container, storyFn());
+  let root = roots.get(canvasElement);
+  if (root && (forceRemount || root.storyId !== id)) {
+    root.cleanup();
+    roots.delete(canvasElement);
+    root = undefined;
+  }
+  if (root) {
+    root.output.value = storyFn();
+  } else {
+    const container = document.createElement("div");
+    canvasElement.replaceChildren(container);
+    const output = createSignal<JSXOutput>(storyFn());
+    const rendered = await renderQwik(
+      container,
+      jsx(Fragment, { children: output }),
+    );
+    root = {
+      storyId: id,
+      output,
+      cleanup: () => {
+        rendered.cleanup();
+        container.remove();
+      },
+    };
+    roots.set(canvasElement, root);
+  }
   showMain();
-}
-
-// I don't know how to do HMR stuff correctly, and Vite seems to keep referencing old files when you make a change.
-// Force a reload when vite notifies of an update as a dirty temporary workaround.
-const viteHotMeta: any = (import.meta as any).hot;
-if (viteHotMeta) {
-  viteHotMeta.on("vite:afterUpdate", () => {
-    document.location.reload();
-  });
+  const mounted = root;
+  return () => {
+    if (roots.get(canvasElement) === mounted) {
+      mounted.cleanup();
+      roots.delete(canvasElement);
+    }
+  };
 }
 
 const actionsArgsEnhancers: ArgsEnhancer[] = [

@@ -1,4 +1,4 @@
-import { QwikCityMockProvider } from "@builder.io/qwik-city";
+import { QwikCityMockProvider } from "@qwik.dev/router";
 import { Decorator } from "./types.js";
 
 /** Wraps story in QwikCityMockProvider */
