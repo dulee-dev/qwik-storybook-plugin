@@ -11,7 +11,7 @@ export function isDocgenComponent(id: string) {
     !id.includes("?") &&
     !id.includes("\0") &&
     /\.tsx$/.test(id) &&
-    !/(?:^|[/\\])(?:node_modules|dist|build|coverage|storybook-static|styled-system|__tests__|__mocks__|generated)(?:[/\\])/.test(
+    !/(?:^|[/\\])(?:node_modules|dist|build|coverage|storybook-static|styled-system|__tests__|__mocks__|generated|\.storybook)(?:[/\\])/.test(
       id,
     ) &&
     !/\.(?:stories|story|test|spec|generated)\.tsx$/.test(id)

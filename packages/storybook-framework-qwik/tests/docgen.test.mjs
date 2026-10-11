@@ -12,6 +12,8 @@ import {
 test("only authored component modules are analyzed", () => {
   assert.equal(isDocgenComponent("/app/src/card.tsx"), true);
   for (const file of [
+    ".storybook/preview.tsx",
+    ".storybook/decorators.tsx",
     "card.stories.tsx",
     "card.spec.tsx",
     "card.test.tsx",
