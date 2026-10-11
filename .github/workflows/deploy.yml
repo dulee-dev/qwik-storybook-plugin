@@ -9,6 +9,7 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 jobs:
   deploy:
+    if: github.repository == 'literalpie/storybook-framework-qwik'
     name: Deploy
     runs-on: ubuntu-latest
 

@@ -7,6 +7,7 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 jobs:
   preview:
+    if: github.repository == 'literalpie/storybook-framework-qwik'
     name: Preview and Test
     env:
       vercel_token: ${{ secrets.VERCEL_TOKEN }}
