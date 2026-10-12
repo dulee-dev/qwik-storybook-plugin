@@ -153,3 +153,38 @@ test("type-only edits invalidate component transforms outside the runtime module
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("global declarations, augmentations and imported declaration modules remain available", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "qwik-docgen-ambient-"));
+  const file = path.join(root, "card.tsx");
+  writeFileSync(
+    path.join(root, "tsconfig.json"),
+    JSON.stringify({ compilerOptions: { jsx: "preserve" }, include: ["*"] }),
+  );
+  writeFileSync(
+    path.join(root, "global.d.ts"),
+    "interface GlobalLabel { label: string }",
+  );
+  writeFileSync(
+    path.join(root, "augment.d.ts"),
+    "export {}; declare global { interface GlobalLabel { count: number } }",
+  );
+  writeFileSync(
+    path.join(root, "props.d.ts"),
+    "export interface Props extends GlobalLabel { enabled: boolean }",
+  );
+  writeFileSync(
+    file,
+    'import type { Props } from "./props"; export function Card(props: Props) { return null; }',
+  );
+  const project = createDocgenProject(root);
+  try {
+    const props = project.parse(file)[0].props;
+    assert.equal(props.label.type.name, "string");
+    assert.equal(props.count.type.name, "number");
+    assert.equal(props.enabled.type.name, "boolean");
+  } finally {
+    project.dispose();
+    rmSync(root, { recursive: true, force: true });
+  }
+});

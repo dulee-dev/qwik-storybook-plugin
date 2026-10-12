@@ -69,7 +69,20 @@ export function createDocgenProject(root: string) {
       options = parsed.options;
       // Keep project ambient declarations, but load components lazily instead of
       // type-checking every route, story and test on the first preview.
-      files = parsed.fileNames.filter((file) => /\.d\.[cm]?ts$/.test(file));
+      files = parsed.fileNames.filter((file) => {
+        if (!/\.d\.[cm]?ts$/.test(file)) return false;
+        const text = ts.sys.readFile(file);
+        if (text === undefined) return false;
+        const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest);
+        // Imported declaration modules are discovered from the selected component.
+        // Global declarations and module augmentations must still be initial roots.
+        return (
+          !ts.isExternalModule(source) ||
+          source.statements.some((statement) =>
+            ts.isModuleDeclaration(statement),
+          )
+        );
+      });
     }
     compilerOptions = options;
     configuredRoots = new Set(files.map(normalize));
@@ -133,9 +146,8 @@ export function createDocgenProject(root: string) {
         extraRoots.add(id);
         projectVersion++;
       }
-      const docs = parser.parseWithProgramProvider(
-        id,
-        () => service!.getProgram()!,
+      const docs = parser.parseWithProgramProvider(id, () =>
+        service!.getProgram()!,
       );
       cache.set(id, docs);
       dependencies.set(id, collectDependencies(id));
