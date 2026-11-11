@@ -261,7 +261,7 @@ importers:
         specifier: ^10.6.1
         version: 10.6.1(@types/react@19.1.14)(prettier@3.9.10)(react@19.3.0)
       storybook-framework-qwik:
-        specifier: workspace:*
+        specifier: workspace:@dulee.dev/storybook-framework-qwik@*
         version: link:../storybook-framework-qwik
       typescript:
         specifier: npm:@typescript/typescript6@^6.0.2
@@ -333,7 +333,7 @@ importers:
         specifier: ^10.6.1
         version: 10.6.1(@types/react@19.1.14)(prettier@3.9.10)(react@19.3.0)
       storybook-framework-qwik:
-        specifier: workspace:*
+        specifier: workspace:@dulee.dev/storybook-framework-qwik@*
         version: link:../storybook-framework-qwik
       typescript:
         specifier: npm:@typescript/typescript6@^6.0.2

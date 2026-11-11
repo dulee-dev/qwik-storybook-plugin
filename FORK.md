@@ -37,5 +37,7 @@ The fixture app uses Qwik v2's router and no longer registers Qwik v1's removed
 prefetch service worker. Development HMR and fresh static builds are verified;
 static watch-build docgen invalidation is not implemented.
 
-No package has been published from this fork. Original upstream automated release
-and deployment workflows remain restricted to the upstream repository.
+The npm package is `@dulee.dev/storybook-framework-qwik` (fork version 0.1.0).
+See the package README for scoped installation and legacy-name alias instructions.
+Original upstream automated release and deployment workflows remain restricted
+to the upstream repository.

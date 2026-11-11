@@ -1,7 +1,7 @@
 {
-  "name": "storybook-framework-qwik",
-  "version": "0.4.4",
-  "description": "Storybook for Qwik: View Qwik components in isolation.",
+  "name": "@dulee.dev/storybook-framework-qwik",
+  "version": "0.1.0",
+  "description": "Storybook for Qwik v2 with native HMR and incremental docgen.",
   "keywords": [
     "storybook",
     "hydration",
@@ -52,9 +52,9 @@
       ]
     }
   },
-  "homepage": "https://github.com/literalpie/storybook-framework-qwik",
+  "homepage": "https://github.com/dulee-dev/qwik-storybook-plugin",
   "bugs": {
-    "url": "https://github.com/literalpie/storybook-framework-qwik"
+    "url": "https://github.com/dulee-dev/qwik-storybook-plugin/issues"
   },
   "repository": {
     "type": "git",
@@ -69,7 +69,7 @@
     "./template/cli/**",
     "*.js",
     "*.d.ts",
-    "./dist/*.d.ts"
+    "./dist/**/*.d.ts"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

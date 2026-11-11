@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "storybook-framework-qwik";
+import type { Meta, StoryObj } from "@dulee.dev/storybook-framework-qwik";
 import { within, userEvent } from "storybook/test";
 
 import { Page } from "./page";

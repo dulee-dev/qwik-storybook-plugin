@@ -70,5 +70,8 @@ export type StoryContext<TArgs = StrictArgs> = GenericStoryContext<
 >;
 
 export type StorybookConfig = Omit<StorybookConfigBase, "framework"> & {
-  framework: "storybook-framework-qwik" | { name: "storybook-framework-qwik" };
+  framework:
+    | "@dulee.dev/storybook-framework-qwik"
+    | "storybook-framework-qwik"
+    | { name: "@dulee.dev/storybook-framework-qwik" | "storybook-framework-qwik" };
 } & StorybookConfigVite;

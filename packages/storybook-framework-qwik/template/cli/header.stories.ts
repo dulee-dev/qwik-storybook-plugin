@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "storybook-framework-qwik";
+import type { Meta, StoryObj } from "@dulee.dev/storybook-framework-qwik";
 import type { HeaderProps } from "./header";
 import { Header } from "./header";
 import { $ } from "@qwik.dev/core";
